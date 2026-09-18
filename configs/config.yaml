@@ -2,13 +2,22 @@ project:
   name: FloodRiskAI
   version: "1.0"
 
-spatial:
-  grid_resolution: 0.01
-  coordinate_system: "EPSG:4326"
+study_area:
+  country: India
+  state: Bihar
+  basin: Ganga
 
 temporal:
-  frequency: "daily"
-  rainfall_windows:
+  start_date: "2015-01-01"
+  end_date: "2025-12-31"
+  frequency: daily
+
+spatial:
+  coordinate_system: "EPSG:4326"
+  grid_resolution: 0.05
+
+rainfall:
+  windows:
     - 1
     - 3
     - 7
@@ -17,34 +26,33 @@ temporal:
 targets:
   flood:
     type: binary
-    positive_class: 1
-
+    classes:
+      0: "No Flood"
+      1: "Flood"
   severity:
     type: multiclass
     classes:
-      0: Low
-      1: Moderate
-      2: High
-      3: Severe
+      0: "Low"
+      1: "Moderate"
+      2: "High"
+      3: "Severe"
 
 models:
   baseline:
     - logistic_regression
     - random_forest
-
   advanced:
     - xgboost
     - lightgbm
 
 evaluation:
-  classification_metrics:
+  classification:
     - precision
     - recall
     - f1
     - roc_auc
     - pr_auc
-
-  regression_metrics:
+  regression:
     - mae
     - rmse
     - r2

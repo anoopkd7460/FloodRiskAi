@@ -15,3 +15,19 @@ models/*.pkl
 models/*.joblib
 
 .streamlit/
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+.env
+.streamlit/
+data/raw/
+data/interim/
+data/processed/
+models/*.pkl
+models/*.joblib
+*.log
+.DS_Store

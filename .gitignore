@@ -31,3 +31,4 @@ models/*.pkl
 models/*.joblib
 *.log
 .DS_Store
+.vscode/

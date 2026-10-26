@@ -85,3 +85,38 @@ The current experiment therefore does not establish that river conditions are un
 Gradient Boosting is the leading candidate from the tested spatial-generalization experiments. The Decision Tree remains useful when high recall is prioritized.
 
 The models are experimental baselines, not yet validated operational flood forecasts. Future work should improve temporal target design, evaluate spatial cross-validation, assess probability calibration and threshold selection, and obtain better-aligned river and flood observations before final model selection.
+
+
+## 9. Phase 5 — Spatial Cross-Validation and Threshold Analysis
+
+Five-fold GroupKFold cross-validation was conducted using `region_id` as the grouping variable. Each fold held out distinct region IDs, with zero region overlap between training and validation sets.
+
+### Threshold Comparison
+
+| Threshold | Mean F1 | Mean Precision | Mean Recall |
+|---:|---:|---:|---:|
+| 0.30 | 0.8293 | 0.7469 | 0.9351 |
+| 0.40 | 0.8356 | 0.7757 | 0.9068 |
+| 0.50 | 0.8336 | 0.8127 | 0.8564 |
+| 0.60 | 0.8219 | 0.8589 | 0.7881 |
+| 0.70 | 0.7908 | 0.9171 | 0.6959 |
+
+### Cross-Validation Summary
+
+| Metric | Mean | Standard Deviation |
+|---|---:|---:|
+| Accuracy at 0.50 | 0.8728 | 0.0241 |
+| ROC-AUC | 0.9489 | 0.0103 |
+| PR-AUC | 0.9165 | 0.0199 |
+| F1 at 0.50 | 0.8336 | 0.0379 |
+
+### Findings and Decision
+
+- Threshold 0.40 achieved the highest mean F1 (0.8356) in the exploratory threshold comparison.
+- Threshold 0.30 achieved the highest mean recall (0.9351), while threshold 0.70 achieved the highest mean precision (0.9171).
+- The mean F1 difference between thresholds 0.40 and 0.50 was small.
+- **Decision:** Retain 0.50 as the default threshold for now. Treat 0.40 as a candidate requiring separate validation rather than selecting it as the final threshold based on the same cross-validation results.
+
+### Limitations
+
+The folds hold out region IDs but do not enforce a geographic-distance buffer, so nearby grid cells may still appear in different folds. The supervised labels cover only 2015–2019 and 2021; missing years must not be interpreted as non-flood observations. These results evaluate experimental classification performance and do not establish calibrated probabilities or operational flood-warning performance.

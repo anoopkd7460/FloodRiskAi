@@ -120,3 +120,38 @@ Five-fold GroupKFold cross-validation was conducted using `region_id` as the gro
 ### Limitations
 
 The folds hold out region IDs but do not enforce a geographic-distance buffer, so nearby grid cells may still appear in different folds. The supervised labels cover only 2015–2019 and 2021; missing years must not be interpreted as non-flood observations. These results evaluate experimental classification performance and do not establish calibrated probabilities or operational flood-warning performance.
+
+
+## 10. Temporal Threshold Selection and Probability Evaluation
+
+A Gradient Boosting classifier was trained on 1,204 observations from 2015–2018, with 301 observations from 2019 used for threshold selection and 301 observations from 2021 reserved for temporal testing.
+
+### Validation Threshold Results
+
+Thresholds from 0.30 to 0.70 were evaluated in increments of 0.05 using the 2019 validation year. Threshold 0.30 achieved the highest validation F1 score of 0.8759, with precision 0.9203 and recall 0.8355.
+
+The selected threshold was then evaluated on the held-out 2021 test year.
+
+### Temporal Test Results
+
+| Metric | 2021 Test Result |
+|---|---:|
+| Threshold | 0.30 |
+| Accuracy | 0.8937 |
+| Precision | 0.8741 |
+| Recall | 0.8872 |
+| F1 | 0.8806 |
+| ROC-AUC | 0.9506 |
+| PR-AUC | 0.9539 |
+| Brier score | 0.0960 |
+| Log loss | 0.3357 |
+
+### Calibration Assessment
+
+The five-bin calibration curve showed that observed flood fractions exceeded mean predicted probabilities in every bin. This suggests possible underestimation of flood risk. However, calibration has not been corrected, and the reported Brier score and log loss have not been compared against a reference model.
+
+### Decision and Limitations
+
+Threshold 0.30 is the selected threshold for this temporal experiment because it achieved the highest F1 score among the tested thresholds on the 2019 validation set. It should not automatically be treated as the final operational threshold.
+
+The temporal test reuses geographic grid cells from earlier years, so it measures temporal generalization rather than independent geographic generalization. The target remains annual inundation presence, not event-level flood forecasting. These results do not establish operational warning performance or fully calibrated flood probabilities.
